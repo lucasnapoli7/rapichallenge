@@ -1,0 +1,68 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="icon" type="image/png" href="~/Content/favicon.png" sizes=128x128 />
+
+    <title>@ViewBag.Title</title>
+
+    @Scripts.Render("~/bundles/modernizr")
+
+    <script src="~/Content/admin3/assets/vendors/webfont.js"></script>
+    <script>
+        WebFont.load({
+            google: { "families": ["Poppins:300,400,500,600,700", "Roboto:300,400,500,600,700"] },
+            active: function () {
+                sessionStorage.fonts = true;
+            }
+        });
+    </script>
+
+    <link href="~/Content/admin3/assets/vendors/base/vendors.bundle.css" rel="stylesheet" />
+    <link href="~/Content/admin3/assets/demo/demo6/base/style.bundle.css" rel="stylesheet" />
+
+    @RenderSection("styles", required: false)
+
+</head>
+
+<body class="m-page--fluid m--skin- m-content--skin-light2 m-header--fixed m-header--fixed-mobile m-brand--minimize m-footer--push m-aside--offcanvas-default">
+
+    <div class="m-grid m-grid--hor m-grid--root m-page">
+
+        @Html.Partial("~/Views/Shared/_Top.cshtml")
+
+        <div class="m-grid__item m-grid__item--fluid m-grid m-grid--ver-desktop m-grid--desktop m-body">
+
+            <button class="m-aside-left-close  m-aside-left-close--skin-light" id="m_aside_left_close_btn">
+                <i class="la la-close"></i>
+            </button>
+
+            <div class="m-grid__item m-grid__item--fluid m-wrapper" id="divPrincipal">
+
+                <div class="m-content">
+
+                    @RenderBody()
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <script src="~/Content/admin3/assets/vendors/base/vendors.bundle.js"></script>
+    <script src="~/Content/admin3/assets/demo/demo6/base/scripts.bundle.js"></script>
+
+    @Scripts.Render("~/bundles/jqueryval")
+
+    @RenderSection("scripts", required: false)
+
+</body>
+
+</html>

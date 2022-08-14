@@ -1,0 +1,120 @@
+﻿@model RapiChallenge.ViewModels.Home.HomeLoginVM
+
+@{
+    Layout = "~/Views/Shared/_LayoutLogin.cshtml";
+
+    ViewBag.Title = "Login";
+}
+
+<div class="m-grid m-grid--hor m-grid--root m-page">
+
+    <div class="m-grid__item m-grid__item--fluid m-grid m-grid--ver-desktop m-grid--desktop m-grid--tablet-and-mobile m-grid--hor-tablet-and-mobile m-login m-login--1 m-login--signin" id="m_login">
+
+        <div class="m-grid__item m-grid__item--order-tablet-and-mobile-2 m-login__aside">
+
+            <div class="m-stack m-stack--hor m-stack--desktop">
+
+                <div class="m-stack__item m-stack__item--fluid">
+
+                    <div class="m-login__wrapper">
+
+                        <div class="m-login__logo">
+                            <a href="#">
+                                <img src="/Content/favicon.png">
+                            </a>
+                        </div>
+
+                        @using (Html.BeginForm())
+                        {
+                            <div class="m-login__signin">
+
+                                <div class="m-login__head">
+                                    <h3 class="m-login__title">
+                                        @ViewBag.Title
+                                    </h3>
+                                </div>
+
+                                <div class="m-login__form m-form">
+
+                                    <div class="form-group m-form__group">
+                                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control m-input loginInput", @placeholder = "Email", @autocomplete = "off" })
+                                        @Html.ValidationMessageFor(m => m.Email, "", new { @class = "" })
+                                    </div>
+
+                                    <div class="form-group m-form__group">
+                                        @Html.PasswordFor(m => m.Password, new { @class = "form-control m-input m-login__form-input--last loginInput", @placeholder = "Contraseña" })
+                                        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "" })
+                                    </div>
+
+                                    <div class="m-login__form-action">
+                                        <button type="button" id="formSubmit" class="btn btn-focus m-btn m-btn--square m-btn--custom btn-block btn-info">
+                                            Ingresar
+                                        </button>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        }
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="m-grid__item m-grid__item--fluid m-grid m-grid--center m-grid--hor m-grid__item--order-tablet-and-mobile-1 m-login__content"
+             style="background-image: url('/Content/fondo.jpg'); ">
+            <div class="m-grid__item m-grid__item--middle">
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+@section Styles{
+
+    <style>
+
+        .m-login__content {
+            background-position-x: right;
+            background-size: contain !important;
+            background-repeat: no-repeat;
+        }
+
+        input {
+            text-align: center;
+            font-size: 1.4rem !important;
+            font-weight: 500 !important;
+        }
+
+        .m-login.m-login--1 .m-login__wrapper {
+            padding: 15% 2rem 2rem 2rem;
+        }
+
+        .m-login__logo img {
+            object-fit: scale-down;
+        }
+
+        .m-login__logo img {
+            height: 18vh;
+        }
+
+        .m-login__form m-form {
+            margin-top: 20px;
+        }
+
+        @@media (max-width: 1500px) {
+
+            .m-login__content {
+                background-position-x: 110%;
+            }
+        }
+
+    </style>
+
+}
