@@ -19,7 +19,7 @@
         {
             context.Rol.AddOrUpdate(
             p => p.Nombre,
-                new Rol { Nombre = "Administrador", Reidrect = "/Producto" }
+                new Rol { Nombre = "Administrador", Redirect = "/Producto" }
             );
             context.SaveChanges();
 

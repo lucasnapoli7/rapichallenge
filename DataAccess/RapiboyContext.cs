@@ -25,6 +25,7 @@ namespace RapiChallenge.DataAccess
         public DbSet<Usuario> Usuario { get; set; }
         public DbSet<Rol> Rol { get; set; }
         public DbSet<Categoria> Categoria { get; set; }
+        public DbSet<Producto> Producto { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

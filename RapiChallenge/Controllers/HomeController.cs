@@ -28,9 +28,22 @@ namespace RapiChallenge.Controllers
         {
             //TODO-TASK: COMPLETAR LA LOGICA LLAMANDO A LA CAPA BUSINESS DE USUARIO PARA LA VALIDACION DEL LOGUEO Y REALIZAR EL REDIRECT DE SER EXITOSO
 
-            //businessLogicUsuario.ValidarLogin...;
+            //DEVUELVE VERDADERO SI EL USUARIO ESTÁ EN LA BASE DE DATOS
+            if (businessLogicUsuario.ValidarLogin(model.Email, model.Password))
+            {
+                Redirect(model);
+                return Json(new { Resultado = true });
+            }
+            
+            return Json(new { Resultado = false });
+        }
 
-            return Json(new { Resultado = true });
+        public ActionResult Redirect(HomeLoginVM model)
+        {
+            var url = businessLogicUsuario.ObtenerRedirect(model.Email);
+            //return View(businessLogicUsuario.ObtenerRedirect(model.Email));
+            //return View("/Producto");
+            return RedirectToAction("Index", "Producto");
         }
 
         public ActionResult TestUsuarios()

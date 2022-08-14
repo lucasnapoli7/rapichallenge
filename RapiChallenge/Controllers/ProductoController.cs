@@ -2,7 +2,7 @@
 
 namespace RapiChallenge.Controllers
 {
-    [Authorize(Roles = "Administrador")]
+    //[Authorize(Roles = "Administrador")]
     public class ProductoController : Controller
     {
         //TODO-TASK: ARMAR LOGICA PARA ABM COMPLETO DE PRODUCTO

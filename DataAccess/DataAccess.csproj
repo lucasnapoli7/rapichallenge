@@ -57,6 +57,10 @@
     <Compile Include="Migrations\202206241641330_init.designer.cs">
       <DependentUpon>202206241641330_init.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202208131826051_Producto añadido.cs" />
+    <Compile Include="Migrations\202208131826051_Producto añadido.designer.cs">
+      <DependentUpon>202208131826051_Producto añadido.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RapiboyContext.cs" />
@@ -76,6 +80,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202206241641330_init.resx">
       <DependentUpon>202206241641330_init.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202208131826051_Producto añadido.resx">
+      <DependentUpon>202208131826051_Producto añadido.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

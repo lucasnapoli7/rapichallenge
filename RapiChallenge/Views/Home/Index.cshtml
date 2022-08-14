@@ -114,7 +114,34 @@
                 background-position-x: 110%;
             }
         }
-
     </style>
 
 }
+
+@section scripts {
+    <script>
+        @*$(function () {
+            $("#formSubmit").click(function () {
+                var url = "@Url.Action("ValidarLogin", "Home")";
+                var data = { Email = "lucas@gmail.com", Password="12345678" };
+                $.post(url, data).done(function () {
+
+                })
+            })
+        })*@
+        $(document).ready(function () {
+            $("#formSubmit").click(function (e) {
+                var data = $('form').serialize();
+                $.ajax({
+                    url: "/Home/ValidarLogin",
+                    type: "POST",
+                    dataType: 'json',
+                    contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                    data: data
+                });
+            });
+        });
+    </script>
+}
+
+
