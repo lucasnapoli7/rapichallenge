@@ -51,7 +51,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ICategoriaService.cs" />
+    <Compile Include="IProductoService.cs" />
     <Compile Include="IServiceBase.cs" />
+    <Compile Include="IRolService.cs" />
+    <Compile Include="CategoriaService.cs" />
+    <Compile Include="ProductoService.cs" />
+    <Compile Include="RolService.cs" />
     <Compile Include="UsuarioService.cs" />
     <Compile Include="IUsuarioService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

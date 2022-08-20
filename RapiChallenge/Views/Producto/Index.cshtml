@@ -21,7 +21,7 @@
                 <div class="m-portlet__head-tools">
                     <ul class="m-portlet__nav">
                         <li class="m-portlet__nav-item">
-                            <button data-toggle="modal" data-target="#modal-detalle" type="button" class="btn btn-primary">
+                            <button data-toggle="modal" data-target="#modal-detalle" type="button" class="btn btn-primary" data-whatever="Crear">
                                 <i class="la la-plus"></i>
                                 <span>
                                     Nuevo
@@ -35,8 +35,20 @@
 
             <div class="m-portlet__body">
 
-                @*TABLA AQUI*@
-
+                <table id="table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Foto</th>
+                            <th>Nombre</th>
+                            <th>Categoria</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
             </div>
 
         </div>
@@ -44,3 +56,235 @@
     </div>
 
 </div>
+
+<!-- Modal #modal-detalle-->
+<div class="modal fade" id="modal-detalle" tabindex="-1" role="dialog" aria-labelledby="modal-detalleLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-detalleLabel"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            
+            <div class="modal-body">
+                @using (Html.BeginForm())
+                {
+                    <div class="form-group">
+                        <label for="Nombre" class="col-form-label">Nombre:</label>
+                        <input type="text" class="form-control" id="Nombre" name="Nombre">
+                    </div>
+                    <div class="form-group">
+                        <label for="Imagen" class="col-form-label">Foto:</label>
+                        <input type="text" class="form-control" id="Imagen" name="Imagen">
+                    </div>
+                    <div class="form-group">
+                        <label for="IdCategoria" class="col-form-label">Categoría:</label>
+                        <select name="IdCategoria" class="form-control" id="IdCategoria">
+                        </select>
+                    </div>
+                    <input type="hidden" name="Id" id="Id" value="0" />
+                    <input type="hidden" name="Activo" id="Activo" value="1" />
+                    <input type="hidden" name="IdUsuario" id="IdUsuario" value="1" />
+                    <input type="hidden" name="FechaCreacion" id="FechaCreacion" value="0" />
+                }
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeModal()">Cerrar</button>
+                <button type="button" class="btn btn-primary" id="guardarCambios">Guardar cambios</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script>
+
+        var table;
+        var botonEditarEstado = ` <button id="editarEstado" class='btn btn-success' aria-label='Cambiar estado')"><i class='fa fa-refresh'></i></button> </td>`;
+        function botonesAcciones(id) {
+            return ` <button id='editarProducto' class='btn btn-primary' aria-label='` + id + `' title='Editar' data-toggle="modal" data-target="#modal-detalle" data-whatever="Editar" ><i class='fa fa-edit'></i></button> <button id='eliminarProducto' class='btn btn-danger' aria-label='` + id + `' title='Borrar'><i class='fa fa-trash'></i></button>`
+        };
+        
+        $(document).ready(function () {
+            table = $('#table').DataTable({
+                ordering: false,
+                ajax: {
+                    url: "GetAll",
+                    data: "productos",
+                },
+                
+                columns: [
+                    { data: 'Id' },
+                    {
+                        data: 'Imagen',
+                        render: function (data, type, row) {
+                            return `<img src="` + row.Imagen + `" style="width:50px" />`;
+                        }
+                    },
+                    { data: 'Nombre' },
+                    { data: 'Categoria.Nombre' },
+                    {
+                        data: 'Activo',
+                        render: function (data, type, row) {
+                            return ((row.Activo) ? "Activo" : "Inactivo") + botonEditarEstado;
+                        }
+                    },
+                    {
+                        data: 'Id',
+                        render: function (data, type, row) {
+                            return botonesAcciones(row.Id);
+                        },
+                    },
+                ],
+            });
+
+            //EDITA ESTADO DE ESE PRODUCTO
+            $('#table tbody').on('click', 'tr td button#editarEstado', function (e) {
+                //Busca la etiqueta donde está la información para editarla
+                td = (e.originalEvent.composedPath().length == 19) ? e.originalEvent.composedPath()[2] : e.originalEvent.composedPath()[1]
+                var rowData = table.row(td).data();
+                //Busca el ID de la línea
+                tr = (e.originalEvent.composedPath().length == 19) ? e.originalEvent.composedPath()[3] : e.originalEvent.composedPath()[2]
+                id = tr.children[0].innerText
+                //Edita el estado en la base de datos
+                $.ajax({
+                    url: "/Producto/EditarEstadoPorID",
+                    type: "POST",
+                    dataType: 'json',
+                    contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                    data: { id: id },
+                    success: function (data) {
+                        //Cambia el valor en la tabla
+                        td.innerHTML = (data.producto.Activo) ? "Activo" + botonEditarEstado : "Inactivo" + botonEditarEstado;
+                        
+
+                    }
+                })
+            });
+
+        });
+        //EJECUTA MODAL, PUEDE VENIR DE CREAR O EDITAR
+        $('#modal-detalle').on('shown.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var id = button[0].ariaLabel
+            var accion = button.data('whatever');
+            $('#modal-detalle').find('.modal-title').text(accion + ' producto');
+            $('#myInput').trigger('focus');
+            $.ajax({
+                url: "/Producto/ObtenerCategorias",
+                type: 'GET',
+                success: function (res) {
+                    if ($("#IdCategoria").children().length == 0) {
+                        res.categorias.forEach(x => $("#IdCategoria").append("<option value=" + x.Id + ">" + x.Nombre + "</option>"))
+
+                    }
+                }
+            });
+            if (accion == "Editar") {
+                $.ajax({
+                    url: "/Producto/ObtenerProductoPorId/"+id,
+                    type: 'GET',
+                    success: function (res) {
+                        for (var key in res.data) {
+                            $('#' + key).val(res.data[key])
+                        }
+                    }
+                });
+            }
+        })
+
+        
+        
+        //Guardar cambios sea crear o editar
+        $('#guardarCambios').on('click', function (event) {
+            accion = $('#modal-detalle').find('.modal-title')[0].innerText.split(' ')[0];
+            fechaActual = new Date().toISOString().split('T')[0];
+            $("#FechaCreacion").val(fechaActual)
+            producto = $('form').serialize();
+            if (accion == "Crear") {
+                //Crea el producto en la base de datos
+                $.ajax({
+                    url: "/Producto/CrearProducto",
+                    type: "POST",
+                    dataType: 'json',
+                    contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                    data: producto,
+                    success: function (data) {
+                        closeModal();
+                        table.ajax.reload();
+                        Swal.fire(
+                            'Creado con éxito',
+                            '',
+                            'success'
+                        )
+                    }
+                })
+            } else {
+                //Edita el producto en la base de datos
+                producto = $('form').serialize();
+                $.ajax({
+                    url: "/Producto/EditarProducto",
+                    type: "POST",
+                    dataType: 'json',
+                    contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                    data: producto,
+                    success: function (data) {
+                        closeModal();
+                        table.ajax.reload();
+                        Swal.fire(
+                            'Editado con éxito',
+                            '',
+                            'success'
+                        )
+                    }
+                })
+            }
+        })
+
+
+        $('#table tbody').on('click', 'tr td button#eliminarProducto', function (e) {
+            var id = e.currentTarget.ariaLabel;
+            var tr = (e.originalEvent.composedPath().length == 19) ? e.originalEvent.composedPath()[3] : e.originalEvent.composedPath()[2];
+            console.log(tr);
+            Swal.fire({
+                    title: "Está a punto de eliminar un producto",
+                    text: "¿Eliminar producto "+ id +"?",
+                    showCancelButton: true,
+                    confirmButtonText: "Eliminar",
+                    cancelButtonText: "Cancelar",
+                })
+                .then(resultado => {
+                    if (resultado.value) {
+                        //Elimina el producto
+                        $.ajax({
+                            url: "/Producto/EliminarProducto",
+                            type: "POST",
+                            dataType: 'json',
+                            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                            data: {id: id},
+                            success: function (data) {
+                                //table.ajax.reload();
+                                tr.remove();
+                                Swal.fire(
+                                    'Eliminado con éxito',
+                                    '',
+                                    'success'
+                                )
+                            }
+                        })
+                    }
+                })
+        })
+
+        
+
+
+        function closeModal() {
+            $('#modal-detalle').find('form').trigger('reset')
+            $('#modal-detalle').modal('hide');
+        }
+    </script>
+}

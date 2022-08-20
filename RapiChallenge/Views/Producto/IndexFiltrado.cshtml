@@ -1,0 +1,164 @@
+﻿@{
+    ViewBag.Title = "Productos";
+}
+
+<div class="row">
+
+    <div class="col-xl-12 col-lg-12">
+
+        <div class="m-portlet m-portlet--mobile">
+
+            <div class="m-portlet__head">
+
+                <div class="m-portlet__head-caption">
+                    <div class="m-portlet__head-title">
+                        <h3 class="m-portlet__head-text">
+                            @ViewBag.Title
+                        </h3>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="m-portlet__body">
+
+                <form class="form-inline m-portlet__body-select mx-auto">
+                    <input type="hidden" id="idParametro" value="@ViewBag.ID" />
+                    <div class="form-group" hidden>
+                        <select name="IdCategoria" class="form-control mx-sm-3" id="IdCategoria">
+                            <option value="" selected disabled>Elija una categoría para filtrar</option>
+                        </select>
+                        <button type="button" class="btn btn-primary" id="formSubmit" disabled>Filtrar</button>
+                    </div>
+
+                </form>
+
+                <table id="table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Foto</th>
+                            <th>Nombre</th>
+                            <th>Categoria</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                       
+                    </tbody>
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Styles{
+
+    <style>
+        .m-portlet__body-select {
+            min-width: 250px;
+            max-width: 600px
+        }
+    </style>
+
+}
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            var idCategoria = $('#idParametro').val();
+            console.log(idCategoria);
+            if (idCategoria == undefined || idCategoria == "" || idCategoria.length == 0) {
+                $("#table").attr("hidden", true);
+                $(".form-group").attr("hidden", false);
+                $.ajax({
+                    url: "/Producto/ObtenerCategorias",
+                    type: 'GET',
+                    success: function (res) {
+                        if ($("#IdCategoria").children().length == 1) {
+                            res.categorias.forEach(x => $("#IdCategoria").append("<option value=" + x.Id + ">" + x.Nombre + "</option>"))
+
+                        }
+                    }
+                });
+
+                $('#IdCategoria').on('change', '', function (e) {
+                    if ($("#IdCategoria").val() != null) {
+                        $("#formSubmit").attr("disabled", false)
+                    }
+
+                });
+
+                $("#formSubmit").click(function (e) {
+                    var idCategoria = $("#IdCategoria").val();
+                    window.location.href = window.location.origin + '/Producto/IndexFiltrado/' + idCategoria;
+                });
+
+            } else {
+
+                var tbody = $("tbody");
+                $.ajax({
+                    url: "/Producto/ObtenerCategoriaPorId/" + idCategoria,
+                    type: 'GET',
+                    success: function (res) {
+                        nombreCategoria = res.categoria.Nombre;
+                        $.ajax({
+                            url: "/Producto/ObtenerProductosFiltradoPorCategoria/" + idCategoria,
+                            type: 'GET',
+                            success: function (res) {
+                                res.productos.forEach(x =>
+                                    tbody.append(`
+                    <tr>
+                        <td>`+ x.Id + `</td>
+                        <td><img src="` + x.Imagen + `" style="width:50px" /></td>
+                        <td>`+ x.Nombre + `</td>
+                        <td>`+ nombreCategoria + `</td>
+                        <td>`+ ((x.Activo) ? "Activo" : "Inactivo") + `</td>
+                    </tr>`)
+                                );
+                                table = $('#table').DataTable({
+                                    ordering: false
+                                });
+                            }
+                        });
+                    }
+                });
+            }
+
+            
+            
+
+            
+
+            //table = $('#table').DataTable({
+            //    ordering: false,
+            //    ajax: {
+            //        url: 1,
+            //        data: "productos",
+            //    },
+
+            //    columns: [
+            //        { data: 'Id' },
+            //        {
+            //            data: 'Imagen',
+            //            render: function (data, type, row) {
+            //                return `<img src="` + row.Imagen + `" style="width:50px" />`;
+            //            }
+            //        },
+            //        { data: 'Nombre' },
+            //        { data: 'Categoria.Nombre' },
+            //        {
+            //            data: 'Activo',
+            //            render: function (data, type, row) {
+            //                return ((row.Activo) ? "Activo" : "Inactivo");
+            //            }
+            //        },
+            //    ],
+            //});
+        })
+    </script>
+}

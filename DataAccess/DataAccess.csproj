@@ -61,6 +61,10 @@
     <Compile Include="Migrations\202208131826051_Producto añadido.designer.cs">
       <DependentUpon>202208131826051_Producto añadido.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202208181841578_Eliminado autogenerar fecha en Producto.cs" />
+    <Compile Include="Migrations\202208181841578_Eliminado autogenerar fecha en Producto.designer.cs">
+      <DependentUpon>202208181841578_Eliminado autogenerar fecha en Producto.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RapiboyContext.cs" />
@@ -83,6 +87,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202208131826051_Producto añadido.resx">
       <DependentUpon>202208131826051_Producto añadido.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202208181841578_Eliminado autogenerar fecha en Producto.resx">
+      <DependentUpon>202208181841578_Eliminado autogenerar fecha en Producto.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

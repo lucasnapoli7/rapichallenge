@@ -9,7 +9,6 @@ namespace RapiChallenge.Entities
         public int Id { get; set; }
         public string Nombre { get; set; }
         public string Imagen { get; set; }
-        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime FechaCreacion { get; set; }
         public bool Activo { get; set; }
         public int IdCategoria { get; set; }

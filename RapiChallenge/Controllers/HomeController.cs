@@ -31,19 +31,21 @@ namespace RapiChallenge.Controllers
             //DEVUELVE VERDADERO SI EL USUARIO ESTÁ EN LA BASE DE DATOS
             if (businessLogicUsuario.ValidarLogin(model.Email, model.Password))
             {
-                Redirect(model);
                 return Json(new { Resultado = true });
             }
             
             return Json(new { Resultado = false });
         }
 
-        public ActionResult Redirect(HomeLoginVM model)
+        public void Desloguear()
+        {
+            businessLogicUsuario.Desloguear();
+        }
+
+        public JsonResult ObtenerUrlSegunRol(HomeLoginVM model)
         {
             var url = businessLogicUsuario.ObtenerRedirect(model.Email);
-            //return View(businessLogicUsuario.ObtenerRedirect(model.Email));
-            //return View("/Producto");
-            return RedirectToAction("Index", "Producto");
+            return Json(new { Url = url });
         }
 
         public ActionResult TestUsuarios()

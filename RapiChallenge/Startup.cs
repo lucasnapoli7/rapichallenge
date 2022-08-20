@@ -27,7 +27,12 @@ namespace RapiChallenge
             builder.RegisterControllers(Assembly.GetExecutingAssembly());
 
             builder.RegisterType<UsuarioService>().As<IUsuarioService>().AsImplementedInterfaces().InstancePerLifetimeScope().PreserveExistingDefaults();
+            builder.RegisterType<RolService>().As<IRolService>().AsImplementedInterfaces().InstancePerLifetimeScope().PreserveExistingDefaults();
+            builder.RegisterType<ProductoService>().As<IProductoService>().AsImplementedInterfaces().InstancePerLifetimeScope().PreserveExistingDefaults();
+            builder.RegisterType<CategoriaService>().As<ICategoriaService>().AsImplementedInterfaces().InstancePerLifetimeScope().PreserveExistingDefaults();
             builder.RegisterType<BusinessLogicUsuario>().As<IBusinessLogicUsuario>().AsImplementedInterfaces().InstancePerLifetimeScope().PreserveExistingDefaults();
+            builder.RegisterType<BusinessLogicProducto>().As<IBusinessLogicProducto>().AsImplementedInterfaces().InstancePerLifetimeScope().PreserveExistingDefaults();
+
 
             IContainer container = AutofacConfig(app, builder);
             app.UseAutofacMiddleware(container);
